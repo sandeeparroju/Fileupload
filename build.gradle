@@ -1,0 +1,58 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.7.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+	
+	id "org.sonarqube" version "3.0"
+}
+
+group = 'com.safeindniaserver.manager'
+version = '0.0.5-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+springBoot {
+    mainClassName = 'com.sterlite.fileuploadserver.manager.FileuploadServerApplication'
+}
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-jersey'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'	
+	implementation 'net.sf.ehcache:ehcache'
+	implementation 'org.hibernate:hibernate-envers'
+	implementation 'io.micrometer:micrometer-registry-jmx'
+	
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+	compile group: 'org.springframework.boot', name:'spring-boot-devtools'
+	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'		
+	compile group: 'net.sf.ehcache', name:'ehcache'
+	compile group: 'org.projectlombok',name:'lombok'
+	compile group: 'org.snmp4j', name: 'snmp4j', version: '2.5.0'
+	compile group: 'org.hibernate', name: 'hibernate-envers'
+	
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'	
+	compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+		
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+}
+
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'FileUploadServer': 'Gradle Jar FileUploadServer',  
+        	'Implementation-Version': version,
+        	'Main-Class': 'com.sterlite.fileuploadserver.manager.FileuploadServerApplication'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
